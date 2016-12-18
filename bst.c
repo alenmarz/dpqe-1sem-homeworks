@@ -1,4 +1,4 @@
-#include "stdlib.h"
+#include <stdlib.h>
 
 #include "bst.h"
 #include "deque.h"
@@ -6,8 +6,8 @@
 
 void tree_init(
     Tree * tree,
-    int (*compare_keys)(void *, void *), 
-    void (*destroy_node_hook)(Node *)
+    int (*compare_keys)(void*, void*), 
+    void (*destroy_node_hook)(Node*)
 ) {
     tree->root = NULL;
     tree->compare_keys = compare_keys;
@@ -15,7 +15,7 @@ void tree_init(
 }
 
 
-void subtree_destroy(Node * node, void (*destroy_node_hook)(Node *)) {
+void subtree_destroy(Node* node, void (*destroy_node_hook)(Node*)) {
     if (node->left != NULL) {
         subtree_destroy(node->left, destroy_node_hook);
     }
@@ -29,7 +29,7 @@ void subtree_destroy(Node * node, void (*destroy_node_hook)(Node *)) {
 }
 
 
-void tree_destroy(Tree * tree) {
+void tree_destroy(Tree* tree) {
     if (tree->root != NULL) {
         subtree_destroy(tree->root, tree->destroy_node_hook);
     }
@@ -41,8 +41,8 @@ void tree_destroy(Tree * tree) {
 
 
 void subtree_insert(
-    Node * node, Node * new_node,
-    int (*compare_keys)(void *, void *)
+    Node* node, Node* new_node,
+    int (*compare_keys)(void*, void*)
 ) {
     int cmp = compare_keys(new_node->key, node->key);
 
@@ -61,8 +61,8 @@ void subtree_insert(
 }
 
 
-void tree_insert(Tree * tree, void * key, void * value) {
-    Node * new_node = (Node *) malloc(sizeof(Node));
+void tree_insert(Tree* tree, void* key, void* value) {
+    Node* new_node = (Node*) malloc(sizeof(Node));
     new_node->key = key;
     new_node->value = value;
     new_node->left = NULL;
@@ -77,8 +77,8 @@ void tree_insert(Tree * tree, void * key, void * value) {
 }
 
 
-Node * subtree_lookup(
-    Node * node, void * key,
+Node* subtree_lookup(
+    Node* node, void* key,
     int (*compare_keys)(void *, void *)
 ) {
     int cmp = compare_keys(key, node->key);
@@ -87,7 +87,7 @@ Node * subtree_lookup(
         return node;
     }
 
-    Node * candidate = cmp > 0 ? node->right : node->left;
+    Node* candidate = cmp > 0 ? node->right : node->left;  //!!!
 
     if (candidate != NULL) {
         return subtree_lookup(candidate, key, compare_keys);
@@ -97,12 +97,12 @@ Node * subtree_lookup(
 }
 
 
-void * tree_lookup(Tree * tree, void * key) {
+void* tree_lookup(Tree* tree, void* key) {
     if (tree->root == NULL) {
         return NULL;
     }
 
-    Node * node = subtree_lookup(tree->root, key, tree->compare_keys);
+    Node* node = subtree_lookup(tree->root, key, tree->compare_keys);
     if (node == NULL) {
         return NULL;
     }
@@ -111,8 +111,8 @@ void * tree_lookup(Tree * tree, void * key) {
 }
 
 
-Node * remove_node(Node * node) {
-    Node * candidate = NULL;
+Node* remove_node(Node* node) {
+    Node* candidate = NULL;
 
     if (node->left == NULL) {
         candidate = node->right;
@@ -126,7 +126,7 @@ Node * remove_node(Node * node) {
         }
     }
 
-    Node * parent = node->parent;
+    Node* parent = node->parent;
     if (parent != NULL) {
         if (parent->left == node) {
             parent->left = candidate;
@@ -139,7 +139,7 @@ Node * remove_node(Node * node) {
         return NULL;
     }
 
-    Node * candidate_parent = candidate->parent;
+    Node* candidate_parent = candidate->parent;
     if (candidate_parent->left == candidate) {
         candidate_parent->left = NULL;
     } else {
@@ -163,17 +163,17 @@ Node * remove_node(Node * node) {
 }
 
 
-void tree_remove(Tree * tree, void * key) {
+void tree_remove(Tree* tree, void* key) {
     if (tree->root == NULL) {
         return;
     }
 
-    Node * node = subtree_lookup(tree->root, key, tree->compare_keys);
+    Node* node = subtree_lookup(tree->root, key, tree->compare_keys);
     if (node == NULL) {
         return;
     }
 
-    Node * possible_root = remove_node(node);
+    Node* possible_root = remove_node(node);
 
     if (node == tree->root) {
         tree->root = possible_root;
@@ -184,15 +184,15 @@ void tree_remove(Tree * tree, void * key) {
 }
 
 
-void default_destroy_node_hook(Node * node) {
+void default_destroy_node_hook(Node* node) {
     free(node->key);
     free(node->value);
 }
 
 
 void subtree_traverse(
-    Node * node,
-    void (*visit_node)(Node *), Order order
+    Node* node,
+    void (*visit_node)(Node*), Order order
 ) {
     if (order == PREFIX) {
         visit_node(node);
@@ -217,8 +217,8 @@ void subtree_traverse(
 
 
 void tree_traverse(
-    Tree * tree,
-    void (*visit_node)(Node *),
+    Tree* tree,
+    void (*visit_node)(Node*),
     Order order
 ) {
     if (tree->root == NULL) {
@@ -230,9 +230,9 @@ void tree_traverse(
 
 
 void generic_first_scan(
-    Tree * tree,
-    void (*visit_node)(Node *),
-    void (*deque_insert)(Deque *, void *)
+    Tree* tree,
+    void (*visit_node)(Node*),
+    void (*deque_insert)(Deque*, void*)
 ) {
     if (tree->root == NULL) {
         return;
@@ -240,22 +240,22 @@ void generic_first_scan(
 
     Deque deque;
     deque_init(&deque, default_destroy_list_node);
-    deque_insert(&deque, (void *)tree->root);
+    deque_insert(&deque, (void*)tree->root);
 
-    Node * node = NULL;
+    Node* node = NULL;
 
     while (deque.begin != NULL) {
-        node = (Node *)deque_front(&deque);
+        node = (Node*)deque_front(&deque);
 
         deque_popfront(&deque);
         visit_node(node);
 
         if (node->left != NULL) {
-            deque_insert(&deque, (void *)node->left);
+            deque_insert(&deque, (void*)node->left);
         }
 
         if (node->right != NULL) {
-            deque_insert(&deque, (void *)node->right);
+            deque_insert(&deque, (void*)node->right);
         }
     }
 
@@ -263,11 +263,11 @@ void generic_first_scan(
 }
 
 
-void bfs(Tree * tree, void (*visit_node)(Node *)) {
+void bfs(Tree* tree, void (*visit_node)(Node*)) {
     return generic_first_scan(tree, visit_node, deque_pushback);
 }
 
 
-void dfs(Tree * tree, void (*visit_node)(Node *)) {
+void dfs(Tree* tree, void (*visit_node)(Node*)) {
     return generic_first_scan(tree, visit_node, deque_pushfront);
 }
