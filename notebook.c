@@ -5,18 +5,18 @@
 #include "bst.h"
 
 
-int compare_keys(void * left, void * right) {
-    return strcmp((char *)left, (char *)right);
+int compare_keys(void* left, void* right) {
+    return strcmp((char*)left, (char*)right);
 }
 
 
-void simple_tree_init(Tree * tree) {
+void simple_tree_init(Tree* tree) {
     tree_init(tree, compare_keys, default_destroy_node_hook);
 }
 
 
-void simple_tree_insert(Tree * tree, char * name, char * number) {
-    char * old_number = tree_lookup(tree, name);
+void simple_tree_insert(Tree* tree, char* name, char* number) {
+    char* old_number = tree_lookup(tree, name);
 
     if (old_number == NULL) {
         printf("OK\n");
@@ -29,8 +29,8 @@ void simple_tree_insert(Tree * tree, char * name, char * number) {
 }
 
 
-void simple_tree_lookup(Tree * tree, char * name) {
-    char * number = tree_lookup(tree, name);
+void simple_tree_lookup(Tree* tree, char* name) {
+    char* number = tree_lookup(tree, name);
 
     if (number == NULL) {
         printf("NO\n");
@@ -49,30 +49,30 @@ typedef enum Action {
 
 typedef struct Command {
     Action action;
-    char * name;
-    char * number;
+    char* name;
+    char* number;
 } Command;
 
 
 void read_command(Command * command) {
     char command_token[8];
 
-    char * name = NULL;
-    char * number = NULL;
+    char* name = NULL;
+    char* number = NULL;
 
     scanf("%s", command_token);
 
     if (strncmp(command_token, "STOP", 4) == 0) {
         command->action = STOP;
     } else {
-        name = (char *)malloc(sizeof(char) * 50);
+        name = (char*)malloc(sizeof(char) * 50);
 
         if (strncmp(command_token, "FIND", 4) == 0) {
             command->action = LOOKUP;
             scanf(" %s", name);
         } else {
             command->action = INSERT;
-            number = (char *)malloc(sizeof(char) * 20);
+            number = (char*)malloc(sizeof(char) * 20);
             scanf(" %s %s", name, number);
         }
     }
