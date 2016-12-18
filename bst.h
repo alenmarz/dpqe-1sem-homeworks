@@ -41,7 +41,7 @@ void tree_remove(Tree* tree, void* key);
 
 void default_destroy_node_hook(Node* node);
 void default_insert_node_hook(Node* node);
-Node * default_remove_node_hook(Node* node);
+Node* default_remove_node_hook(Node* node);
 
 void tree_traverse(
     Tree* tree,
