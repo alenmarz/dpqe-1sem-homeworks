@@ -5,7 +5,7 @@
 
 
 void tree_init(
-    Tree * tree,
+    Tree* tree,
     int (*compare_keys)(void*, void*), 
     void (*destroy_node_hook)(Node*)
 ) {
