@@ -5,9 +5,9 @@
 #include "deque.h"
 
 
-int compare_keys(void * left, void * right) {
-    int left_value = *((int *) left);
-    int right_value = *((int *) right);
+int compare_keys(void* left, void* right) {
+    int left_value = *((int*) left);
+    int right_value = *((int*) right);
     
     if (left_value == right_value) {
         return 0;
@@ -21,39 +21,39 @@ int compare_keys(void * left, void * right) {
 }
 
 
-void simple_tree_init(Tree * tree) {
+void simple_tree_init(Tree* tree) {
     tree_init(tree, compare_keys, default_destroy_node_hook);
 }
 
 
-void simple_tree_insert(Tree * tree, int key) {
-    int * key_pointer = (int *)malloc(sizeof(int));
+void simple_tree_insert(Tree* tree, int key) {
+    int* key_pointer = (int*)malloc(sizeof(int));
     *key_pointer = key;
 
-    int * value_pointer = (int *)malloc(sizeof(int));
+    int* value_pointer = (int*)malloc(sizeof(int));
     *value_pointer = 0;
     tree_insert(tree, key_pointer, value_pointer);
 }
 
 
-void check_tree(Tree * tree, int target_sum) {
+void check_tree(Tree* tree, int target_sum) {
     Deque deque;
     deque_init(&deque, default_destroy_list_node);
 
     deque_pushfront(&deque, tree->root);
 
-    Node * node;
+    Node* node;
     int has_path = 0;
 
-    while ((node = (Node *)deque_front(&deque)) != NULL) {
+    while ((node = (Node*)deque_front(&deque)) != NULL) {
         deque_popfront(&deque);
 
-        int weight = *((int *)node->key);
+        int weight = *((int*)node->key);
         if (node->parent != NULL) {
-            weight += *((int *)node->parent->value);
+            weight += *((int*)node->parent->value);
         }
 
-        *((int *)node->value) = weight;
+        *((int*)node->value) = weight;
 
         if (weight == target_sum && node->left == NULL && node->right == NULL) {
             has_path = 1;
