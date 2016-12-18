@@ -66,7 +66,7 @@ int node_depth(Node* node) {
 }
 
 
-void si                                                                                                                      mple_tree_traverse(Tree * tree, void (*visit_node)(int, float, int)) {
+void simple_tree_traverse(Tree * tree, void (*visit_node)(int, float, int)) {                                                                                                                 
     void simple_visit_node(Node* node) {
         visit_node(
             *((int*)(node->key)),
