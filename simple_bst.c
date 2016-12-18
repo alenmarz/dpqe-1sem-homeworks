@@ -1,12 +1,12 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "bst.h"
 
 
-int compare_keys(void * left, void * right) {
-    int left_value = *((int *) left);
-    int right_value = *((int *) right);
+int compare_keys(void* left, void* right) {
+    int left_value = *((int*) left);
+    int right_value = *((int*) right);
     
     if (left_value == right_value) {
         return 0;
@@ -20,24 +20,24 @@ int compare_keys(void * left, void * right) {
 }
 
 
-void simple_tree_init(Tree * tree) {
+void simple_tree_init(Tree* tree) {
     tree_init(tree, compare_keys, default_destroy_node_hook);
 }
 
 
-void simple_tree_insert(Tree * tree, int key, float value) {
-    int * key_pointer = (int *)malloc(sizeof(int));
+void simple_tree_insert(Tree* tree, int key, float value) {
+    int* key_pointer = (int*)malloc(sizeof(int));
     *key_pointer = key;
 
-    float * value_pointer = (float *)malloc(sizeof(float));
+    float* value_pointer = (float*)malloc(sizeof(float));
     *value_pointer = value;
 
     tree_insert(tree, key_pointer, value_pointer);
 }
 
 
-void simple_tree_remove(Tree * tree, int key) {
-    int * key_pointer = (int *)malloc(sizeof(int));
+void simple_tree_remove(Tree* tree, int key) {
+    int* key_pointer = (int*)malloc(sizeof(int));
     *key_pointer = key;
 
     tree_remove(tree, key_pointer);
@@ -45,7 +45,7 @@ void simple_tree_remove(Tree * tree, int key) {
 }
 
 
-int node_depth(Node * node) {
+int node_depth(Node* node) {
     int depth = 0;
     while (node->parent != NULL) {
         ++depth;
@@ -55,11 +55,11 @@ int node_depth(Node * node) {
 }
 
 
-void simple_tree_traverse(Tree * tree, void (*visit_node)(int, float, int)) {
-    void simple_visit_node(Node * node) {
+void simple_tree_traverse(Tree* tree, void (*visit_node)(int, float, int)) {
+    void simple_visit_node(Node* node) {
         visit_node(
-            *((int *)(node->key)),
-            *((float *)(node->value)),
+            *((int*)(node->key)),
+            *((float*)(node->value)),
             node_depth(node)
         );
     }
@@ -68,11 +68,11 @@ void simple_tree_traverse(Tree * tree, void (*visit_node)(int, float, int)) {
 }
 
 
-void simple_bfs(Tree * tree, void (*visit_node)(int, float, int)) {
-    void simple_visit_node(Node * node) {
+void simple_bfs(Tree* tree, void (*visit_node)(int, float, int)) {
+    void simple_visit_node(Node* node) {
         visit_node(
-            *((int *)(node->key)),
-            *((float *)(node->value)),
+            *((int*)(node->key)),
+            *((float*)(node->value)),
             node_depth(node)
         );
     }
@@ -81,11 +81,11 @@ void simple_bfs(Tree * tree, void (*visit_node)(int, float, int)) {
 }
 
 
-void simple_dfs(Tree * tree, void (*visit_node)(int, float, int)) {
-    void simple_visit_node(Node * node) {
+void simple_dfs(Tree* tree, void (*visit_node)(int, float, int)) {
+    void simple_visit_node(Node* node) {
         visit_node(
-            *((int *)(node->key)),
-            *((float *)(node->value)),
+            *((int*)(node->key)),
+            *((float*)(node->value)),
             node_depth(node)
         );
     }
